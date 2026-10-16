@@ -1,0 +1,255 @@
+:root {
+  color-scheme: dark;
+  --bg: #0b0d12;
+  --bg-elevated: #12151c;
+  --border: #2a3140;
+  --text: #f4f7fb;
+  --muted: #9aa6b8;
+  --accent: #7c9cff;
+  --accent-strong: #5b7cfa;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+  background:
+    radial-gradient(1200px 500px at 10% -10%, #1b2744 0%, transparent 55%),
+    radial-gradient(900px 400px at 100% 0%, #1a2236 0%, transparent 50%),
+    var(--bg);
+  color: var(--text);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.app {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.header h1 {
+  font-size: 2.1rem;
+  letter-spacing: -0.03em;
+}
+
+.header p {
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+.card {
+  background: color-mix(in srgb, var(--bg-elevated) 88%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.dropzone {
+  display: grid;
+  place-items: center;
+  min-height: 220px;
+  border: 1.5px dashed var(--border);
+  border-radius: 14px;
+  background: #0e1219;
+  cursor: pointer;
+  text-align: center;
+  padding: 24px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.dropzone:hover,
+.dropzone.active {
+  border-color: var(--accent);
+  background: #12192a;
+}
+
+.dropzone strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.dropzone span {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.hidden-input {
+  display: none;
+}
+
+.mode {
+  border: 0;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mode legend {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.mode label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.mode label.selected {
+  border-color: var(--accent);
+  background: #12192a;
+}
+
+.mode input {
+  accent-color: var(--accent);
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.button {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 16px;
+  background: var(--accent-strong);
+  color: white;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.status {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.error {
+  color: #ff8d8d;
+  margin-top: 12px;
+}
+
+.slider {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  margin-top: 20px;
+  user-select: none;
+  background: #000;
+  aspect-ratio: 4 / 3;
+}
+
+.slider.checkerboard {
+  background-color: #1c2230;
+  background-image:
+    linear-gradient(45deg, #2a3140 25%, transparent 25%),
+    linear-gradient(-45deg, #2a3140 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #2a3140 75%),
+    linear-gradient(-45deg, transparent 75%, #2a3140 75%);
+  background-size: 24px 24px;
+  background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+}
+
+.slider img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.slider .after {
+  clip-path: inset(0 0 0 var(--pos));
+}
+
+.handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--pos);
+  width: 2px;
+  background: white;
+  transform: translateX(-1px);
+}
+
+.handle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 34px;
+  height: 34px;
+  border: 2px solid white;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  background: color-mix(in srgb, var(--accent) 70%, black);
+}
+
+.range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: ew-resize;
+}
+
+.labels {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.labels span {
+  background: rgba(0, 0, 0, 0.55);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+}
+
+.download {
+  margin-top: 16px;
+}
