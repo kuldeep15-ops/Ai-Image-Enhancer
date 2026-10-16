@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { removeBackground } from "@imgly/background-removal";
 import ComparisonSlider from "@/components/ComparisonSlider";
 import DropZone from "@/components/DropZone";
 
@@ -27,21 +28,29 @@ export default function HomePage() {
     setResultUrl(null);
 
     try {
-      const body = new FormData();
-      body.append("image", file);
-      body.append("mode", mode);
+      if (mode === "rembg") {
+        // Client-side Free Background Removal (No Replicate API required)
+        const imageBlob = await removeBackground(file);
+        const url = URL.createObjectURL(imageBlob);
+        setResultUrl(url);
+      } else {
+        // Replicate AI Photo Enhancement
+        const body = new FormData();
+        body.append("image", file);
+        body.append("mode", mode);
 
-      const response = await fetch("/api/enhance", {
-        method: "POST",
-        body,
-      });
-      const data = (await response.json()) as { url?: string; error?: string };
+        const response = await fetch("/api/enhance", {
+          method: "POST",
+          body,
+        });
+        const data = (await response.json()) as { url?: string; error?: string };
 
-      if (!response.ok || !data.url) {
-        throw new Error(data.error || "Processing failed.");
+        if (!response.ok || !data.url) {
+          throw new Error(data.error || "Processing failed.");
+        }
+
+        setResultUrl(data.url);
       }
-
-      setResultUrl(data.url);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
@@ -122,14 +131,16 @@ export default function HomePage() {
 
         {originalUrl && resultUrl && (
           <>
-            <ComparisonSlider
-              beforeSrc={originalUrl}
-              afterSrc={resultUrl}
-              position={position}
-              onPositionChange={setPosition}
-              afterLabel={afterLabel}
-              checkerboard={mode === "rembg"}
-            />
+            <div style={{ backgroundColor: mode === "rembg" ? "#ffffff" : "transparent", borderRadius: "8px", overflow: "hidden" }}>
+              <ComparisonSlider
+                beforeSrc={originalUrl}
+                afterSrc={resultUrl}
+                position={position}
+                onPositionChange={setPosition}
+                afterLabel={afterLabel}
+                checkerboard={mode === "rembg"}
+              />
+            </div>
             <a className="button download" href={resultUrl} target="_blank" rel="noreferrer">
               Open result
             </a>
